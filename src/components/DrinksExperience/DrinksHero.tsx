@@ -135,6 +135,7 @@ export const DrinksHero: React.FC = () => {
                   src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=1200&q=85"
                   alt="Ceremonial Matcha Latte"
                   className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0c1510] via-transparent to-transparent opacity-85" />
 
@@ -174,6 +175,7 @@ export const DrinksHero: React.FC = () => {
                     src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=300&q=80"
                     alt="Strawberry Matcha"
                     className="w-full h-full object-cover"
+                    loading="lazy" decoding="async"
                   />
                 </div>
                 <div>

@@ -6,6 +6,7 @@ import { useApp } from '../../context/AppContext';
 import { FOOD_SIZE_SURCHARGE, sumSelectedPrices } from '../../lib/pricing';
 import { formatNumberId } from '../../lib/format';
 import { useDialog } from '../../hooks/useDialog';
+import { withImageWidth } from '../../lib/image';
 
 const ADDONS_AVAILABLE = [
   { id: 'egg', name: '63°C Japanese Onsen Egg', price: 6000 },
@@ -104,9 +105,10 @@ export const FoodDetailModal: React.FC = () => {
           {/* Left Column: Large Image */}
           <div className="md:w-1/2 relative bg-[#120d0a] shrink-0 min-h-[260px] md:min-h-full">
             <img
-              src={selectedFood.image}
+              src={withImageWidth(selectedFood.image, 900)}
               alt={selectedFood.name}
               className="w-full h-full object-cover object-center"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#1c1410] via-transparent to-transparent md:hidden" />
             <div className="absolute top-4 left-4 flex items-center gap-2">

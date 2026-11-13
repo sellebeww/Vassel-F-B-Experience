@@ -4,6 +4,7 @@ import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight, Sparkles, PlusCircle }
 import { useApp } from '../context/AppContext';
 import { formatNumberId } from '../lib/format';
 import { useDialog } from '../hooks/useDialog';
+import { withImageWidth } from '../lib/image';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -158,9 +159,10 @@ export const CartDrawer: React.FC = () => {
                 >
                   {/* Thumbnail */}
                   <img
-                    src={item.image}
+                    src={withImageWidth(item.image, 160)}
                     alt={item.name}
                     className="w-16 h-16 rounded-xl object-cover shrink-0 bg-black/40"
+                    loading="lazy" decoding="async"
                   />
 
                   {/* Details */}
@@ -267,6 +269,7 @@ export const CartDrawer: React.FC = () => {
                         src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=120&q=80"
                         alt="Matcha"
                         className="w-10 h-10 rounded-lg object-cover"
+                        loading="lazy" decoding="async"
                       />
                       <div>
                         <span className="text-xs font-medium text-white block">
@@ -292,6 +295,7 @@ export const CartDrawer: React.FC = () => {
                         src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=120&q=80"
                         alt="Fries"
                         className="w-10 h-10 rounded-lg object-cover"
+                        loading="lazy" decoding="async"
                       />
                       <div>
                         <span className="text-xs font-medium text-white block">

@@ -5,6 +5,7 @@ import { FOOD_MENU_ITEMS } from '../../data/foodData';
 import { FoodCategory, MenuItem } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { formatNumberId } from '../../lib/format';
+import { withImageWidth } from '../../lib/image';
 
 const CATEGORIES: FoodCategory[] = [
   'All',
@@ -107,10 +108,10 @@ export const FoodMenu: React.FC = () => {
                 {/* Image Container */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-[#120c09]">
                   <img
-                    src={item.image}
+                    src={withImageWidth(item.image, 640)}
                     alt={item.name}
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
+                    loading="lazy" decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1f1612] via-transparent to-black/20" />
 

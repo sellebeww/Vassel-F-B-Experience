@@ -5,6 +5,7 @@ import { DRINKS_MENU_ITEMS } from '../../data/drinksData';
 import { DrinkCategory, MenuItem } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { formatNumberId } from '../../lib/format';
+import { withImageWidth } from '../../lib/image';
 
 const DRINK_CATEGORIES: DrinkCategory[] = [
   'All',
@@ -109,10 +110,10 @@ export const DrinksMenu: React.FC = () => {
                 {/* Image Container with Elegant Ratio */}
                 <div className="relative aspect-[16/11] overflow-hidden bg-[#0a120e]">
                   <img
-                    src={item.image}
+                    src={withImageWidth(item.image, 640)}
                     alt={item.name}
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
+                    loading="lazy" decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#13221a] via-transparent to-black/25" />
 

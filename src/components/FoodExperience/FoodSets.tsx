@@ -6,6 +6,7 @@ import { FoodSet } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { sumSelectedPrices } from '../../lib/pricing';
 import { formatNumberId } from '../../lib/format';
+import { withImageWidth } from '../../lib/image';
 
 export const FoodSets: React.FC = () => {
   const { addToCart, setCustomizingSet } = useApp();
@@ -110,9 +111,10 @@ export const FoodSets: React.FC = () => {
                 <div>
                   <div className="relative aspect-[16/10] rounded-xl overflow-hidden mb-4 bg-black/40">
                     <img
-                      src={set.image}
+                      src={withImageWidth(set.image, 800)}
                       alt={set.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy" decoding="async"
                     />
                     {set.badge && (
                       <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-[#c95d2c] text-white text-[10px] font-bold uppercase tracking-wider shadow">

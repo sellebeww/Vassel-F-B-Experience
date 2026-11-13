@@ -123,6 +123,7 @@ export const LandingChoiceScreen: React.FC = () => {
               }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
               className="w-full h-full object-cover object-center transition-transform duration-700"
+              decoding="async"
             />
             {/* Rich Warm Vignette & Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#140e0b] via-[#140e0b]/50 to-transparent" />
@@ -203,6 +204,7 @@ export const LandingChoiceScreen: React.FC = () => {
               }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
               className="w-full h-full object-cover object-center transition-transform duration-700"
+              loading="lazy" decoding="async"
             />
             {/* Serene Japanese Matcha & Sage Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0e1713] via-[#0e1713]/55 to-transparent" />

@@ -6,6 +6,7 @@ import { useApp } from '../../context/AppContext';
 import { DRINK_SIZE_SURCHARGE, sumSelectedPrices } from '../../lib/pricing';
 import { formatNumberId } from '../../lib/format';
 import { useDialog } from '../../hooks/useDialog';
+import { withImageWidth } from '../../lib/image';
 
 const MILK_OPTIONS = [
   { id: 'Fresh Milk', name: 'Farm Fresh Dairy Milk', extraPrice: 0 },
@@ -116,9 +117,10 @@ export const DrinksCustomizationModal: React.FC = () => {
           {/* Left Column: Large Aesthetic Image & Japanese Details */}
           <div className="md:w-1/2 relative bg-[#0a130e] shrink-0 min-h-[260px] md:min-h-full">
             <img
-              src={selectedDrink.image}
+              src={withImageWidth(selectedDrink.image, 900)}
               alt={selectedDrink.name}
               className="w-full h-full object-cover object-center"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#121e17] via-transparent to-transparent md:hidden" />
             

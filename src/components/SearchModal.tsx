@@ -9,6 +9,7 @@ import { MenuItem, FoodSet } from '../types';
 import { searchItems } from '../lib/search';
 import { formatNumberId } from '../lib/format';
 import { useDialog } from '../hooks/useDialog';
+import { withImageWidth } from '../lib/image';
 
 const RECENT_SEARCHES = [
   'Truffle Beef Burger',
@@ -166,9 +167,10 @@ export const SearchModal: React.FC = () => {
                         >
                           <div className="flex items-center gap-3">
                             <img
-                              src={item.image}
+                              src={withImageWidth(item.image, 160)}
                               alt={item.name}
                               className="w-12 h-12 rounded-lg object-cover"
+                              loading="lazy" decoding="async"
                             />
                             <div>
                               <h4 className="text-sm font-medium text-white group-hover:text-[#e28c61] transition-colors">
@@ -202,9 +204,10 @@ export const SearchModal: React.FC = () => {
                         >
                           <div className="flex items-center gap-3">
                             <img
-                              src={item.image}
+                              src={withImageWidth(item.image, 160)}
                               alt={item.name}
                               className="w-12 h-12 rounded-lg object-cover"
+                              loading="lazy" decoding="async"
                             />
                             <div>
                               <h4 className="text-sm font-medium text-white group-hover:text-[#a3d9b4] transition-colors">
@@ -238,9 +241,10 @@ export const SearchModal: React.FC = () => {
                         >
                           <div className="flex items-center gap-3">
                             <img
-                              src={set.image}
+                              src={withImageWidth(set.image, 160)}
                               alt={set.name}
                               className="w-12 h-12 rounded-lg object-cover"
+                              loading="lazy" decoding="async"
                             />
                             <div>
                               <h4 className="text-sm font-medium text-white group-hover:text-[#f5c69b] transition-colors">

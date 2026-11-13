@@ -121,6 +121,7 @@ export const FoodHero: React.FC = () => {
                   src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1200&q=85"
                   alt="Truffle Beef Gourmet Burger"
                   className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#140e0b] via-transparent to-transparent opacity-80" />
 
@@ -157,6 +158,7 @@ export const FoodHero: React.FC = () => {
                     src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=300&q=80"
                     alt="Gyudon"
                     className="w-full h-full object-cover"
+                    loading="lazy" decoding="async"
                   />
                 </div>
                 <div>
