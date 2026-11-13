@@ -103,7 +103,7 @@ export const FoodExperienceView: React.FC = () => {
             >
               ← Back to Main Experience Selector
             </button>
-            <p className="text-[11px] text-stone-500">
+            <p className="text-[11px] text-stone-400">
               © 2026 Craving Studio. Crafted by Vassel Goleyu for extraordinary culinary experiences.
             </p>
           </div>

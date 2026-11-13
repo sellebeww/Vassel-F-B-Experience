@@ -178,7 +178,7 @@ export const DrinksPhilosophy: React.FC = () => {
                   </div>
 
                   <div className="shrink-0 text-right hidden sm:block">
-                    <span className={`text-xs font-mono font-bold block ${isSelected ? 'text-[#a3d9b4]' : 'text-stone-500'}`}>
+                    <span className={`text-xs font-mono font-bold block ${isSelected ? 'text-[#a3d9b4]' : 'text-stone-400'}`}>
                       {pillar.stat}
                     </span>
                   </div>

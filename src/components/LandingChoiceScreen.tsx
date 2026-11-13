@@ -263,7 +263,7 @@ export const LandingChoiceScreen: React.FC = () => {
       </div>
 
       {/* Subtle Footer indicator */}
-      <footer className="relative z-30 w-full px-6 md:px-12 py-3 flex items-center justify-between text-[11px] text-white/40 border-t border-white/5">
+      <footer className="relative z-30 w-full px-6 md:px-12 py-3 flex items-center justify-between text-[11px] text-white/60 border-t border-white/5">
         <span>Click either card to enter the tailored gastronomy room</span>
         <span>Crafted by Vassel Goleyu</span>
       </footer>

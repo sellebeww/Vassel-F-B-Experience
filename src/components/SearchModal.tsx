@@ -266,7 +266,7 @@ export const SearchModal: React.FC = () => {
           </div>
 
           {/* Quick Keyboard hint */}
-          <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-stone-500">
+          <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-stone-400">
             <span>Press ESC or click close to return</span>
             <span>Live filtering active</span>
           </div>
