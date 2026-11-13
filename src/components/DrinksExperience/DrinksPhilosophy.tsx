@@ -178,7 +178,7 @@ export const DrinksPhilosophy: React.FC = () => {
                   </div>
 
                   <div className="shrink-0 text-right hidden sm:block">
-                    <span className={`text-xs font-mono font-bold block ${isSelected ? 'text-[#a3d9b4]' : 'text-stone-500'}`}>
+                    <span className={`text-xs font-mono font-bold block ${isSelected ? 'text-[#a3d9b4]' : 'text-stone-400'}`}>
                       {pillar.stat}
                     </span>
                   </div>
@@ -307,6 +307,7 @@ export const DrinksPhilosophy: React.FC = () => {
               src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=80"
               alt="Artisan Tea Ceremony Whisking"
               className="w-full h-full object-cover"
+              loading="lazy" decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0c1510] via-transparent to-transparent" />
             <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-black/70 backdrop-blur-sm border border-white/10 text-center">

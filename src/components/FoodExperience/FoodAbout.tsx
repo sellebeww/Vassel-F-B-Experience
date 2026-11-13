@@ -17,6 +17,7 @@ export const FoodAbout: React.FC = () => {
                 src="https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80"
                 alt="Chef preparing artisanal burger in kitchen"
                 className="w-full h-full object-cover"
+                loading="lazy" decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#120d0a] via-transparent to-transparent" />
             </div>

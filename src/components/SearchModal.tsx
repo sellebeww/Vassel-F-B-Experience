@@ -6,6 +6,10 @@ import { DRINKS_MENU_ITEMS } from '../data/drinksData';
 import { FOOD_SETS } from '../data/setsData';
 import { useApp } from '../context/AppContext';
 import { MenuItem, FoodSet } from '../types';
+import { searchItems } from '../lib/search';
+import { formatNumberId } from '../lib/format';
+import { useDialog } from '../hooks/useDialog';
+import { withImageWidth } from '../lib/image';
 
 const RECENT_SEARCHES = [
   'Truffle Beef Burger',
@@ -36,36 +40,15 @@ export const SearchModal: React.FC = () => {
     }
   }, [isSearchOpen]);
 
+  const dialogRef = useDialog(isSearchOpen, () => setIsSearchOpen(false));
+
   if (!isSearchOpen) return null;
 
-  const q = query.toLowerCase().trim();
+  const q = query.trim();
 
-  const matchingFood = q
-    ? FOOD_MENU_ITEMS.filter(
-        (item) =>
-          item.name.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q) ||
-          item.description.toLowerCase().includes(q)
-      )
-    : [];
-
-  const matchingDrinks = q
-    ? DRINKS_MENU_ITEMS.filter(
-        (item) =>
-          item.name.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q) ||
-          item.description.toLowerCase().includes(q)
-      )
-    : [];
-
-  const matchingSets = q
-    ? FOOD_SETS.filter(
-        (set) =>
-          set.name.toLowerCase().includes(q) ||
-          set.subtitle.toLowerCase().includes(q) ||
-          set.description.toLowerCase().includes(q)
-      )
-    : [];
+  const matchingFood = searchItems(FOOD_MENU_ITEMS, query);
+  const matchingDrinks = searchItems(DRINKS_MENU_ITEMS, query);
+  const matchingSets = searchItems(FOOD_SETS, query);
 
   const hasResults = matchingFood.length > 0 || matchingDrinks.length > 0 || matchingSets.length > 0;
 
@@ -93,7 +76,12 @@ export const SearchModal: React.FC = () => {
     <AnimatePresence>
       <div 
         id="fullscreen-search-overlay"
-        className="fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-xl flex flex-col p-4 sm:p-8"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search the menu"
+        tabIndex={-1}
+        className="outline-none fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-xl flex flex-col p-4 sm:p-8"
       >
         <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col">
           
@@ -106,12 +94,14 @@ export const SearchModal: React.FC = () => {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                aria-label="Search food, coffee, matcha and sets"
                 placeholder="Search food, coffee, matcha, sets..."
                 className="w-full bg-transparent text-xl sm:text-2xl font-serif-display text-white placeholder-stone-500 focus:outline-none"
               />
               {query && (
                 <button
                   onClick={() => setQuery('')}
+                  aria-label="Clear search"
                   className="p-1 rounded-full hover:bg-white/10 text-stone-400 hover:text-white"
                 >
                   <X className="w-5 h-5" />
@@ -121,6 +111,7 @@ export const SearchModal: React.FC = () => {
 
             <button
               onClick={() => setIsSearchOpen(false)}
+              aria-label="Close search"
               className="p-2.5 rounded-full bg-white/10 text-stone-300 hover:text-white hover:bg-white/20 transition-colors"
             >
               <X className="w-5 h-5" />
@@ -176,16 +167,17 @@ export const SearchModal: React.FC = () => {
                         >
                           <div className="flex items-center gap-3">
                             <img
-                              src={item.image}
+                              src={withImageWidth(item.image, 160)}
                               alt={item.name}
                               className="w-12 h-12 rounded-lg object-cover"
+                              loading="lazy" decoding="async"
                             />
                             <div>
                               <h4 className="text-sm font-medium text-white group-hover:text-[#e28c61] transition-colors">
                                 {item.name}
                               </h4>
                               <span className="text-xs text-stone-400">
-                                {item.category} • Rp {item.price.toLocaleString('id-ID')}
+                                {item.category} • Rp {formatNumberId(item.price)}
                               </span>
                             </div>
                           </div>
@@ -212,16 +204,17 @@ export const SearchModal: React.FC = () => {
                         >
                           <div className="flex items-center gap-3">
                             <img
-                              src={item.image}
+                              src={withImageWidth(item.image, 160)}
                               alt={item.name}
                               className="w-12 h-12 rounded-lg object-cover"
+                              loading="lazy" decoding="async"
                             />
                             <div>
                               <h4 className="text-sm font-medium text-white group-hover:text-[#a3d9b4] transition-colors">
                                 {item.name}
                               </h4>
                               <span className="text-xs text-stone-400">
-                                {item.category} • Rp {item.price.toLocaleString('id-ID')}
+                                {item.category} • Rp {formatNumberId(item.price)}
                               </span>
                             </div>
                           </div>
@@ -248,16 +241,17 @@ export const SearchModal: React.FC = () => {
                         >
                           <div className="flex items-center gap-3">
                             <img
-                              src={set.image}
+                              src={withImageWidth(set.image, 160)}
                               alt={set.name}
                               className="w-12 h-12 rounded-lg object-cover"
+                              loading="lazy" decoding="async"
                             />
                             <div>
                               <h4 className="text-sm font-medium text-white group-hover:text-[#f5c69b] transition-colors">
                                 {set.name}
                               </h4>
                               <span className="text-xs text-stone-400">
-                                From Rp {set.basePrice.toLocaleString('id-ID')}
+                                From Rp {formatNumberId(set.basePrice)}
                               </span>
                             </div>
                           </div>
@@ -272,7 +266,7 @@ export const SearchModal: React.FC = () => {
           </div>
 
           {/* Quick Keyboard hint */}
-          <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-stone-500">
+          <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-stone-400">
             <span>Press ESC or click close to return</span>
             <span>Live filtering active</span>
           </div>

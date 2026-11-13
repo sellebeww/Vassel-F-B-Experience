@@ -4,6 +4,8 @@ import { Plus, Star, Sparkles, Clock, Flame } from 'lucide-react';
 import { FOOD_MENU_ITEMS } from '../../data/foodData';
 import { FoodCategory, MenuItem } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { formatNumberId } from '../../lib/format';
+import { withImageWidth } from '../../lib/image';
 
 const CATEGORIES: FoodCategory[] = [
   'All',
@@ -76,6 +78,7 @@ export const FoodMenu: React.FC = () => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
+                aria-pressed={isSelected}
                 className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-300 ${
                   isSelected
                     ? 'bg-[#c95d2c] text-white shadow-md shadow-[#c95d2c]/30 font-semibold'
@@ -105,10 +108,10 @@ export const FoodMenu: React.FC = () => {
                 {/* Image Container */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-[#120c09]">
                   <img
-                    src={item.image}
+                    src={withImageWidth(item.image, 640)}
                     alt={item.name}
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
+                    loading="lazy" decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1f1612] via-transparent to-black/20" />
 
@@ -146,7 +149,7 @@ export const FoodMenu: React.FC = () => {
                   </div>
 
                   {/* Quick Add Overlay on Hover */}
-                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
                     <button
                       onClick={(e) => handleQuickAdd(e, item)}
                       className="px-4 py-2.5 rounded-full bg-[#c95d2c] text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 shadow-xl hover:bg-[#b54f20] transition-transform hover:scale-105"
@@ -185,7 +188,7 @@ export const FoodMenu: React.FC = () => {
                         Price
                       </span>
                       <span className="font-mono text-base sm:text-lg font-bold text-[#faf7f2]">
-                        Rp {item.price.toLocaleString('id-ID')}
+                        Rp {formatNumberId(item.price)}
                       </span>
                     </div>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { AppProvider, useApp } from './context/AppContext';
 import { LandingChoiceScreen } from './components/LandingChoiceScreen';
 import { Navbar } from './components/Navbar';
@@ -16,7 +16,7 @@ const AppContent: React.FC = () => {
   const { experience } = useApp();
 
   return (
-    <div className="min-h-screen bg-[#0d0a08] text-white selection:bg-[#c95d2c] selection:text-white font-sans antialiased overflow-x-clip">
+    <div className="min-h-screen bg-[#0d0a08] text-white selection:bg-[#c95d2c] selection:text-white font-sans antialiased">
       <AnimatePresence mode="wait">
         {experience === 'landing' ? (
           <motion.div
@@ -72,8 +72,10 @@ const AppContent: React.FC = () => {
 
 export default function App() {
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <MotionConfig reducedMotion="user">
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </MotionConfig>
   );
 }

@@ -2,6 +2,9 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight, Sparkles, PlusCircle } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { formatNumberId } from '../lib/format';
+import { useDialog } from '../hooks/useDialog';
+import { withImageWidth } from '../lib/image';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -18,6 +21,8 @@ export const CartDrawer: React.FC = () => {
     addToCart,
     experience
   } = useApp();
+
+  const dialogRef = useDialog(isCartOpen, () => setIsCartOpen(false));
 
   if (!isCartOpen) return null;
 
@@ -63,7 +68,12 @@ export const CartDrawer: React.FC = () => {
     <AnimatePresence>
       <div 
         id="cart-drawer-overlay"
-        className="fixed inset-0 z-50 overflow-hidden bg-black/70 backdrop-blur-sm flex justify-end"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Shopping cart"
+        tabIndex={-1}
+        className="outline-none fixed inset-0 z-50 overflow-hidden bg-black/70 backdrop-blur-sm flex justify-end"
       >
         <motion.div
           initial={{ opacity: 0 }}
@@ -111,6 +121,7 @@ export const CartDrawer: React.FC = () => {
               )}
               <button
                 onClick={() => setIsCartOpen(false)}
+                aria-label="Close cart"
                 className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 text-stone-400 hover:text-white transition-colors"
               >
                 <X className="w-4 h-4" />
@@ -148,9 +159,10 @@ export const CartDrawer: React.FC = () => {
                 >
                   {/* Thumbnail */}
                   <img
-                    src={item.image}
+                    src={withImageWidth(item.image, 160)}
                     alt={item.name}
                     className="w-16 h-16 rounded-xl object-cover shrink-0 bg-black/40"
+                    loading="lazy" decoding="async"
                   />
 
                   {/* Details */}
@@ -162,6 +174,7 @@ export const CartDrawer: React.FC = () => {
                         </h4>
                         <button
                           onClick={() => removeFromCart(item.cartItemId)}
+                          aria-label={`Remove ${item.name} from cart`}
                           className="text-stone-400 hover:text-red-400 transition-colors p-0.5"
                           title="Remove item"
                         >
@@ -215,6 +228,7 @@ export const CartDrawer: React.FC = () => {
                       <div className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg border border-white/10">
                         <button
                           onClick={() => updateQuantity(item.cartItemId, -1)}
+                          aria-label={`Decrease quantity of ${item.name}`}
                           className="text-stone-400 hover:text-white"
                         >
                           <Minus className="w-3 h-3" />
@@ -224,6 +238,7 @@ export const CartDrawer: React.FC = () => {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.cartItemId, 1)}
+                          aria-label={`Increase quantity of ${item.name}`}
                           className="text-stone-400 hover:text-white"
                         >
                           <Plus className="w-3 h-3" />
@@ -231,7 +246,7 @@ export const CartDrawer: React.FC = () => {
                       </div>
 
                       <span className="font-mono text-xs sm:text-sm font-bold text-[#f5c69b]">
-                        Rp {item.totalPrice.toLocaleString('id-ID')}
+                        Rp {formatNumberId(item.totalPrice)}
                       </span>
                     </div>
                   </div>
@@ -254,6 +269,7 @@ export const CartDrawer: React.FC = () => {
                         src="https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=120&q=80"
                         alt="Matcha"
                         className="w-10 h-10 rounded-lg object-cover"
+                        loading="lazy" decoding="async"
                       />
                       <div>
                         <span className="text-xs font-medium text-white block">
@@ -279,6 +295,7 @@ export const CartDrawer: React.FC = () => {
                         src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=120&q=80"
                         alt="Fries"
                         className="w-10 h-10 rounded-lg object-cover"
+                        loading="lazy" decoding="async"
                       />
                       <div>
                         <span className="text-xs font-medium text-white block">
@@ -309,19 +326,19 @@ export const CartDrawer: React.FC = () => {
                 <div className="flex justify-between">
                   <span>Subtotal</span>
                   <span className="font-mono text-white">
-                    Rp {subtotal.toLocaleString('id-ID')}
+                    Rp {formatNumberId(subtotal)}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Service Fee (5%)</span>
                   <span className="font-mono text-white">
-                    Rp {serviceFee.toLocaleString('id-ID')}
+                    Rp {formatNumberId(serviceFee)}
                   </span>
                 </div>
                 <div className="pt-2 border-t border-white/10 flex justify-between text-sm font-bold text-white">
                   <span>Total</span>
                   <span className="font-mono text-base text-[#f5c69b]">
-                    Rp {totalAmount.toLocaleString('id-ID')}
+                    Rp {formatNumberId(totalAmount)}
                   </span>
                 </div>
               </div>

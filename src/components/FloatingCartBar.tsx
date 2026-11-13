@@ -2,6 +2,8 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { formatNumberId } from '../lib/format';
+import { withImageWidth } from '../lib/image';
 
 export const FloatingCartBar: React.FC = () => {
   const {
@@ -38,10 +40,11 @@ export const FloatingCartBar: React.FC = () => {
             {cart.slice(0, 3).map((item, idx) => (
               <img
                 key={item.cartItemId}
-                src={item.image}
-                alt={item.name}
+                src={withImageWidth(item.image, 120)}
+                alt=""
                 className="w-9 h-9 rounded-full object-cover border-2 border-white/90 shadow-md"
                 style={{ zIndex: 3 - idx }}
+                decoding="async"
               />
             ))}
             {cart.length > 3 && (
@@ -56,7 +59,7 @@ export const FloatingCartBar: React.FC = () => {
               {cartCount} item{cartCount > 1 ? 's' : ''} in cart
             </div>
             <div className="text-[11px] text-white/80 font-mono whitespace-nowrap">
-              Rp {subtotal.toLocaleString('id-ID')}
+              Rp {formatNumberId(subtotal)}
             </div>
           </div>
 

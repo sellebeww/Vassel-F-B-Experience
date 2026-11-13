@@ -11,6 +11,14 @@ import {
 import { FOOD_MENU_ITEMS } from '../data/foodData';
 import { DRINKS_MENU_ITEMS } from '../data/drinksData';
 import { FOOD_SETS } from '../data/setsData';
+import {
+  addCartItem,
+  changeCartQuantity,
+  computeCartTotals,
+  createCartItemId,
+  parseStoredCart,
+  removeCartItem
+} from '../lib/cart';
 
 interface AppContextType {
   experience: ExperienceMode;
@@ -63,8 +71,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Cart State with localStorage hydration
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
-      const saved = localStorage.getItem('cravings_studio_cart');
-      return saved ? JSON.parse(saved) : [];
+      return parseStoredCart(localStorage.getItem('cravings_studio_cart'));
     } catch {
       return [];
     }
@@ -88,46 +95,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [cart]);
 
   const addToCart = (itemData: Omit<CartItem, 'cartItemId'>) => {
-    const cartItemId = `ci-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-    const newItem: CartItem = {
-      ...itemData,
-      cartItemId
-    };
-
-    setCart((prev) => [...prev, newItem]);
+    const cartItemId = createCartItemId();
+    setCart((prev) => addCartItem(prev, itemData, cartItemId));
   };
 
   const updateQuantity = (cartItemId: string, delta: number) => {
-    setCart((prev) =>
-      prev
-        .map((item) => {
-          if (item.cartItemId === cartItemId) {
-            const nextQty = item.quantity + delta;
-            if (nextQty <= 0) return null;
-            return {
-              ...item,
-              quantity: nextQty,
-              totalPrice: item.unitPrice * nextQty
-            };
-          }
-          return item;
-        })
-        .filter((item): item is CartItem => item !== null)
-    );
+    setCart((prev) => changeCartQuantity(prev, cartItemId, delta));
   };
 
   const removeFromCart = (cartItemId: string) => {
-    setCart((prev) => prev.filter((item) => item.cartItemId !== cartItemId));
+    setCart((prev) => removeCartItem(prev, cartItemId));
   };
 
   const clearCart = () => {
     setCart([]);
   };
 
-  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const subtotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
-  const serviceFee = Math.round(subtotal * 0.05); // 5% service fee
-  const totalAmount = subtotal + serviceFee;
+  const { count: cartCount, subtotal, serviceFee, total: totalAmount } = computeCartTotals(cart);
 
   const toggleExperience = () => {
     if (experience === 'food') {

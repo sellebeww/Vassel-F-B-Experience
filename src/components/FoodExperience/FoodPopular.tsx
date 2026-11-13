@@ -2,6 +2,8 @@ import React from 'react';
 import { Star, Flame, Trophy, ArrowRight } from 'lucide-react';
 import { FOOD_MENU_ITEMS } from '../../data/foodData';
 import { useApp } from '../../context/AppContext';
+import { formatNumberId } from '../../lib/format';
+import { withImageWidth } from '../../lib/image';
 
 export const FoodPopular: React.FC = () => {
   const { setSelectedFood } = useApp();
@@ -45,9 +47,10 @@ export const FoodPopular: React.FC = () => {
             >
               <div className="relative aspect-square overflow-hidden bg-black/40">
                 <img
-                  src={dish.image}
+                  src={withImageWidth(dish.image, 640)}
                   alt={dish.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy" decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1f1611] via-transparent to-transparent opacity-80" />
                 <span className="absolute top-3 left-3 w-7 h-7 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-xs font-mono font-bold flex items-center justify-center text-[#f5c69b]">
@@ -80,7 +83,7 @@ export const FoodPopular: React.FC = () => {
 
                 <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
                   <span className="font-mono text-sm font-bold text-[#f5c69b]">
-                    Rp {dish.price.toLocaleString('id-ID')}
+                    Rp {formatNumberId(dish.price)}
                   </span>
                   <span className="text-xs text-[#e28c61] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
                     Order <ArrowRight className="w-3 h-3" />

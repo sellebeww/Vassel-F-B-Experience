@@ -99,7 +99,7 @@ export const DrinksExperienceView: React.FC = () => {
             >
               ← Back to Main Experience Selector
             </button>
-            <p className="text-[11px] text-stone-500">
+            <p className="text-[11px] text-stone-400">
               © 2026 Craving Studio by Vassel Goleyu. Uji Ceremonial Tencha &amp; Specialty Arabica.
             </p>
           </div>

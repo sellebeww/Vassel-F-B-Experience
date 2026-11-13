@@ -3,6 +3,15 @@ import { motion } from 'motion/react';
 import { ArrowRight, Sparkles, Utensils, Coffee, Compass } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
+/** Activates a role="button" element with Enter or Space, like a native button. */
+const activateOnKey = (e: React.KeyboardEvent, action: () => void) => {
+  if (e.target !== e.currentTarget) return;
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    action();
+  }
+};
+
 export const LandingChoiceScreen: React.FC = () => {
   const { setExperience } = useApp();
   const [hoveredSide, setHoveredSide] = useState<'food' | 'drinks' | null>(null);
@@ -88,9 +97,15 @@ export const LandingChoiceScreen: React.FC = () => {
         {/* OPTION 01 — FOOD */}
         <motion.div
           id="choice-option-food"
+          role="button"
+          tabIndex={0}
+          aria-label="Explore Food: meals, comfort food and curated food sets"
           onMouseEnter={() => setHoveredSide('food')}
           onMouseLeave={() => setHoveredSide(null)}
+          onFocus={() => setHoveredSide('food')}
+          onBlur={() => setHoveredSide(null)}
           onClick={() => setExperience('food')}
+          onKeyDown={(e) => activateOnKey(e, () => setExperience('food'))}
           animate={{
             flex: hoveredSide === 'food' ? 1.25 : hoveredSide === 'drinks' ? 0.75 : 1,
           }}
@@ -108,6 +123,7 @@ export const LandingChoiceScreen: React.FC = () => {
               }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
               className="w-full h-full object-cover object-center transition-transform duration-700"
+              decoding="async"
             />
             {/* Rich Warm Vignette & Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#140e0b] via-[#140e0b]/50 to-transparent" />
@@ -162,9 +178,15 @@ export const LandingChoiceScreen: React.FC = () => {
         {/* OPTION 02 — DRINKS */}
         <motion.div
           id="choice-option-drinks"
+          role="button"
+          tabIndex={0}
+          aria-label="Explore Drinks: matcha, coffee and handcrafted beverages"
           onMouseEnter={() => setHoveredSide('drinks')}
           onMouseLeave={() => setHoveredSide(null)}
+          onFocus={() => setHoveredSide('drinks')}
+          onBlur={() => setHoveredSide(null)}
           onClick={() => setExperience('drinks')}
+          onKeyDown={(e) => activateOnKey(e, () => setExperience('drinks'))}
           animate={{
             flex: hoveredSide === 'drinks' ? 1.25 : hoveredSide === 'food' ? 0.75 : 1,
           }}
@@ -182,6 +204,7 @@ export const LandingChoiceScreen: React.FC = () => {
               }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
               className="w-full h-full object-cover object-center transition-transform duration-700"
+              loading="lazy" decoding="async"
             />
             {/* Serene Japanese Matcha & Sage Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0e1713] via-[#0e1713]/55 to-transparent" />
@@ -240,7 +263,7 @@ export const LandingChoiceScreen: React.FC = () => {
       </div>
 
       {/* Subtle Footer indicator */}
-      <footer className="relative z-30 w-full px-6 md:px-12 py-3 flex items-center justify-between text-[11px] text-white/40 border-t border-white/5">
+      <footer className="relative z-30 w-full px-6 md:px-12 py-3 flex items-center justify-between text-[11px] text-white/60 border-t border-white/5">
         <span>Click either card to enter the tailored gastronomy room</span>
         <span>Crafted by Vassel Goleyu</span>
       </footer>

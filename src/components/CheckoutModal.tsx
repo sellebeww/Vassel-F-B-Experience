@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, CheckCircle, QrCode, CreditCard, Wallet, Clock, MapPin, Sparkles, Receipt, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { OrderReceipt } from '../types';
+import { formatNumberId } from '../lib/format';
+import { useDialog } from '../hooks/useDialog';
 
 export const CheckoutModal: React.FC = () => {
   const {
@@ -25,6 +27,13 @@ export const CheckoutModal: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<'qris' | 'card' | 'cash'>('qris');
   const [isProcessing, setIsProcessing] = useState(false);
   const [receipt, setReceipt] = useState<OrderReceipt | null>(null);
+
+  const handleClose = () => {
+    setIsCheckoutOpen(false);
+    setReceipt(null);
+  };
+
+  const dialogRef = useDialog(isCheckoutOpen, handleClose);
 
   if (!isCheckoutOpen) return null;
 
@@ -63,16 +72,16 @@ export const CheckoutModal: React.FC = () => {
     }, 1000);
   };
 
-  const handleClose = () => {
-    setIsCheckoutOpen(false);
-    setReceipt(null);
-  };
-
   return (
     <AnimatePresence>
       <div 
         id="checkout-modal"
-        className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Checkout"
+        tabIndex={-1}
+        className="outline-none fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -92,6 +101,7 @@ export const CheckoutModal: React.FC = () => {
             </div>
             <button
               onClick={handleClose}
+              aria-label="Close checkout"
               className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 text-stone-400 hover:text-white transition-colors"
             >
               <X className="w-4 h-4" />
@@ -135,7 +145,7 @@ export const CheckoutModal: React.FC = () => {
                   </div>
                   <div className="flex justify-between border-t border-white/10 pt-2 text-sm font-bold">
                     <span className="text-stone-300">Total Paid</span>
-                    <span className="text-[#f5c69b]">Rp {receipt.total.toLocaleString('id-ID')}</span>
+                    <span className="text-[#f5c69b]">Rp {formatNumberId(receipt.total)}</span>
                   </div>
                 </div>
 
@@ -293,16 +303,16 @@ export const CheckoutModal: React.FC = () => {
                 <div className="p-4 rounded-2xl bg-black/30 border border-white/10 space-y-2 text-xs">
                   <div className="flex justify-between text-stone-400">
                     <span>Subtotal ({cart.length} items)</span>
-                    <span className="font-mono text-white">Rp {subtotal.toLocaleString('id-ID')}</span>
+                    <span className="font-mono text-white">Rp {formatNumberId(subtotal)}</span>
                   </div>
                   <div className="flex justify-between text-stone-400">
                     <span>Service &amp; Packaging Fee (5%)</span>
-                    <span className="font-mono text-white">Rp {serviceFee.toLocaleString('id-ID')}</span>
+                    <span className="font-mono text-white">Rp {formatNumberId(serviceFee)}</span>
                   </div>
                   <div className="pt-2 border-t border-white/10 flex justify-between font-bold text-sm text-white">
                     <span>Total Payment</span>
                     <span className="font-mono text-base text-[#f5c69b]">
-                      Rp {totalAmount.toLocaleString('id-ID')}
+                      Rp {formatNumberId(totalAmount)}
                     </span>
                   </div>
                 </div>

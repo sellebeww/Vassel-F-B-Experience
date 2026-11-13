@@ -3,6 +3,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Star, Check, Plus, Minus, Sparkles, Coffee, Leaf, Droplet, Snowflake } from 'lucide-react';
 import { MenuItem, DrinkCustomization } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { DRINK_SIZE_SURCHARGE, sumSelectedPrices } from '../../lib/pricing';
+import { formatNumberId } from '../../lib/format';
+import { useDialog } from '../../hooks/useDialog';
+import { withImageWidth } from '../../lib/image';
 
 const MILK_OPTIONS = [
   { id: 'Fresh Milk', name: 'Farm Fresh Dairy Milk', extraPrice: 0 },
@@ -30,15 +34,14 @@ export const DrinksCustomizationModal: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
 
+  const dialogRef = useDialog(!!selectedDrink, () => setSelectedDrink(null));
+
   if (!selectedDrink) return null;
 
   // Realtime Price Calculations
-  const sizePrice = size === 'Large' ? 6000 : 0;
+  const sizePrice = DRINK_SIZE_SURCHARGE[size];
   const milkPrice = MILK_OPTIONS.find((m) => m.id === milk)?.extraPrice || 0;
-  const toppingsTotal = selectedToppings.reduce((sum, topName) => {
-    const found = TOPPING_OPTIONS.find((t) => t.id === topName);
-    return sum + (found ? found.price : 0);
-  }, 0);
+  const toppingsTotal = sumSelectedPrices(selectedToppings, TOPPING_OPTIONS);
 
   const unitPrice = selectedDrink.price + sizePrice + milkPrice + toppingsTotal;
   const totalPrice = unitPrice * quantity;
@@ -88,7 +91,12 @@ export const DrinksCustomizationModal: React.FC = () => {
     <AnimatePresence>
       <div 
         id="drinks-customization-modal"
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Customize ${selectedDrink.name}`}
+        tabIndex={-1}
+        className="outline-none fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -100,6 +108,7 @@ export const DrinksCustomizationModal: React.FC = () => {
           {/* Close Button */}
           <button
             onClick={() => setSelectedDrink(null)}
+            aria-label="Close"
             className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/15 text-stone-300 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
@@ -108,9 +117,10 @@ export const DrinksCustomizationModal: React.FC = () => {
           {/* Left Column: Large Aesthetic Image & Japanese Details */}
           <div className="md:w-1/2 relative bg-[#0a130e] shrink-0 min-h-[260px] md:min-h-full">
             <img
-              src={selectedDrink.image}
+              src={withImageWidth(selectedDrink.image, 900)}
               alt={selectedDrink.name}
               className="w-full h-full object-cover object-center"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#121e17] via-transparent to-transparent md:hidden" />
             
@@ -159,7 +169,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                 </p>
 
                 <div className="mt-3 font-mono text-xl sm:text-2xl font-bold text-[#a3d9b4]">
-                  Rp {selectedDrink.price.toLocaleString('id-ID')}
+                  Rp {formatNumberId(selectedDrink.price)}
                 </div>
               </div>
 
@@ -187,7 +197,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                       >
                         <span className="block text-xs font-medium">{s}</span>
                         <span className="text-[10px] text-stone-400 font-mono block mt-0.5">
-                          {s === 'Large' ? '+Rp 6.000' : 'Included'}
+                          {DRINK_SIZE_SURCHARGE[s] > 0 ? `+Rp ${formatNumberId(DRINK_SIZE_SURCHARGE[s])}` : 'Included'}
                         </span>
                       </button>
                     );
@@ -228,7 +238,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                         </div>
                         {m.extraPrice > 0 && (
                           <span className="text-xs font-mono text-[#a3d9b4]">
-                            +Rp {m.extraPrice.toLocaleString('id-ID')}
+                            +Rp {formatNumberId(m.extraPrice)}
                           </span>
                         )}
                       </div>
@@ -324,7 +334,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                           <span className="text-xs">{top.name}</span>
                         </div>
                         <span className="text-xs font-mono text-[#a3d9b4]">
-                          +Rp {top.price.toLocaleString('id-ID')}
+                          +Rp {formatNumberId(top.price)}
                         </span>
                       </div>
                     );
@@ -382,7 +392,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                 </div>
 
                 <span className="font-mono text-base font-bold">
-                  Rp {totalPrice.toLocaleString('id-ID')}
+                  Rp {formatNumberId(totalPrice)}
                 </span>
               </button>
             </div>
