@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { AppProvider, useApp } from './context/AppContext';
 import { LandingChoiceScreen } from './components/LandingChoiceScreen';
 import { Navbar } from './components/Navbar';
@@ -72,8 +72,10 @@ const AppContent: React.FC = () => {
 
 export default function App() {
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <MotionConfig reducedMotion="user">
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </MotionConfig>
   );
 }
