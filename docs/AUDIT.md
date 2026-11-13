@@ -34,17 +34,20 @@ last column: **fixed** (in this branch), **open** (documented, not changed) or
 | A4 | Category filter buttons do not expose their selected state. | fixed |
 | A5 | There is no visible keyboard focus style on most controls (`focus:outline-none` without a replacement). | fixed (global `:focus-visible` ring) |
 | A6 | No `prefers-reduced-motion` handling. Infinite animations (hero drift, bounce arrows, spinners) and smooth scrolling always run. | fixed |
-| A7 | Some secondary text (for example `text-white/40`, `text-stone-500`) is below 4.5:1 on its background. | see "Contrast" below |
-| A8 | Focus is not trapped inside modals and is not restored on close. | open |
+| A7 | Some small text was below 4.5:1 on its background: `text-white/40` (3.79:1) and `text-stone-500` (4.11:1). | fixed for those captions; the brand accent is a **decision** (see below) |
+| A8 | Focus was not trapped inside modals and not restored on close. | fixed (`useDialog`) |
 
 ### Contrast
 
-Computed contrast of white at a given opacity on the darkest page background
-(`#0e0c0b`): 40 percent is 3.79:1 (fails AA for small text), 50 percent is 5.34:1
-(passes), 60 percent is 7.28:1. Text using opacities or greys below 4.5:1 on its
-actual background was measured in the running app and only those were raised by
-the smallest step that passes. Borderline cases that depend on photos behind the
-text cannot be measured reliably and are listed in the PR for the owner.
+Computed contrast ratios (WCAG formula): white at 40 percent opacity on `#0e0c0b` is
+3.79:1, at 50 percent 5.34:1, at 60 percent 7.28:1. `stone-500` on `#0d0a08` is 4.11:1.
+Those small captions were raised to `white/60` and `stone-400`.
+
+Left unchanged because it is a brand colour decision: white text on the food accent
+`#c95d2c` is 4.13:1 (fails AA for small text; passes for large text), used on buttons
+and small badges. Darkening the accent to about `#b54f20` (5.12:1, already the hover
+colour) would pass. White on the drinks accent `#3e6f4f` is 5.85:1 and passes.
+Text placed over photos cannot be judged reliably without the photos and was not assessed.
 
 ## Performance
 
