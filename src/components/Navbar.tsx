@@ -99,7 +99,7 @@ export const Navbar: React.FC = () => {
                   CRAVING
                 </span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold uppercase tracking-widest ${
+                  className={`hidden min-[400px]:inline-block text-[10px] px-1.5 py-0.5 rounded font-mono font-semibold uppercase tracking-widest ${
                     isFood
                       ? 'bg-[#c95d2c]/20 text-[#e99a77] border border-[#c95d2c]/30'
                       : 'bg-[#3e6f4f]/30 text-[#a3d9b4] border border-[#3e6f4f]/40'

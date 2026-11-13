@@ -16,7 +16,7 @@ const AppContent: React.FC = () => {
   const { experience } = useApp();
 
   return (
-    <div className="min-h-screen bg-[#0d0a08] text-white selection:bg-[#c95d2c] selection:text-white font-sans antialiased overflow-x-clip">
+    <div className="min-h-screen bg-[#0d0a08] text-white selection:bg-[#c95d2c] selection:text-white font-sans antialiased">
       <AnimatePresence mode="wait">
         {experience === 'landing' ? (
           <motion.div
