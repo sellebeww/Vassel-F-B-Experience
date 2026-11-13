@@ -4,6 +4,7 @@ import { X, CheckCircle, QrCode, CreditCard, Wallet, Clock, MapPin, Sparkles, Re
 import { useApp } from '../context/AppContext';
 import { OrderReceipt } from '../types';
 import { formatNumberId } from '../lib/format';
+import { useDialog } from '../hooks/useDialog';
 
 export const CheckoutModal: React.FC = () => {
   const {
@@ -26,6 +27,13 @@ export const CheckoutModal: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<'qris' | 'card' | 'cash'>('qris');
   const [isProcessing, setIsProcessing] = useState(false);
   const [receipt, setReceipt] = useState<OrderReceipt | null>(null);
+
+  const handleClose = () => {
+    setIsCheckoutOpen(false);
+    setReceipt(null);
+  };
+
+  const dialogRef = useDialog(isCheckoutOpen, handleClose);
 
   if (!isCheckoutOpen) return null;
 
@@ -64,16 +72,16 @@ export const CheckoutModal: React.FC = () => {
     }, 1000);
   };
 
-  const handleClose = () => {
-    setIsCheckoutOpen(false);
-    setReceipt(null);
-  };
-
   return (
     <AnimatePresence>
       <div 
         id="checkout-modal"
-        className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Checkout"
+        tabIndex={-1}
+        className="outline-none fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -93,6 +101,7 @@ export const CheckoutModal: React.FC = () => {
             </div>
             <button
               onClick={handleClose}
+              aria-label="Close checkout"
               className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 text-stone-400 hover:text-white transition-colors"
             >
               <X className="w-4 h-4" />

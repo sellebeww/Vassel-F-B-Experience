@@ -5,6 +5,7 @@ import { MenuItem, DrinkCustomization } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { DRINK_SIZE_SURCHARGE, sumSelectedPrices } from '../../lib/pricing';
 import { formatNumberId } from '../../lib/format';
+import { useDialog } from '../../hooks/useDialog';
 
 const MILK_OPTIONS = [
   { id: 'Fresh Milk', name: 'Farm Fresh Dairy Milk', extraPrice: 0 },
@@ -31,6 +32,8 @@ export const DrinksCustomizationModal: React.FC = () => {
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
+
+  const dialogRef = useDialog(!!selectedDrink, () => setSelectedDrink(null));
 
   if (!selectedDrink) return null;
 
@@ -87,7 +90,12 @@ export const DrinksCustomizationModal: React.FC = () => {
     <AnimatePresence>
       <div 
         id="drinks-customization-modal"
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Customize ${selectedDrink.name}`}
+        tabIndex={-1}
+        className="outline-none fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -99,6 +107,7 @@ export const DrinksCustomizationModal: React.FC = () => {
           {/* Close Button */}
           <button
             onClick={() => setSelectedDrink(null)}
+            aria-label="Close"
             className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/15 text-stone-300 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />

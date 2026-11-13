@@ -8,6 +8,7 @@ import { useApp } from '../context/AppContext';
 import { MenuItem, FoodSet } from '../types';
 import { searchItems } from '../lib/search';
 import { formatNumberId } from '../lib/format';
+import { useDialog } from '../hooks/useDialog';
 
 const RECENT_SEARCHES = [
   'Truffle Beef Burger',
@@ -37,6 +38,8 @@ export const SearchModal: React.FC = () => {
       setQuery('');
     }
   }, [isSearchOpen]);
+
+  const dialogRef = useDialog(isSearchOpen, () => setIsSearchOpen(false));
 
   if (!isSearchOpen) return null;
 
@@ -72,7 +75,12 @@ export const SearchModal: React.FC = () => {
     <AnimatePresence>
       <div 
         id="fullscreen-search-overlay"
-        className="fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-xl flex flex-col p-4 sm:p-8"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search the menu"
+        tabIndex={-1}
+        className="outline-none fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-xl flex flex-col p-4 sm:p-8"
       >
         <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col">
           
@@ -85,12 +93,14 @@ export const SearchModal: React.FC = () => {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                aria-label="Search food, coffee, matcha and sets"
                 placeholder="Search food, coffee, matcha, sets..."
                 className="w-full bg-transparent text-xl sm:text-2xl font-serif-display text-white placeholder-stone-500 focus:outline-none"
               />
               {query && (
                 <button
                   onClick={() => setQuery('')}
+                  aria-label="Clear search"
                   className="p-1 rounded-full hover:bg-white/10 text-stone-400 hover:text-white"
                 >
                   <X className="w-5 h-5" />
@@ -100,6 +110,7 @@ export const SearchModal: React.FC = () => {
 
             <button
               onClick={() => setIsSearchOpen(false)}
+              aria-label="Close search"
               className="p-2.5 rounded-full bg-white/10 text-stone-300 hover:text-white hover:bg-white/20 transition-colors"
             >
               <X className="w-5 h-5" />

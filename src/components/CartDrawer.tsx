@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight, Sparkles, PlusCircle } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { formatNumberId } from '../lib/format';
+import { useDialog } from '../hooks/useDialog';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -19,6 +20,8 @@ export const CartDrawer: React.FC = () => {
     addToCart,
     experience
   } = useApp();
+
+  const dialogRef = useDialog(isCartOpen, () => setIsCartOpen(false));
 
   if (!isCartOpen) return null;
 
@@ -64,7 +67,12 @@ export const CartDrawer: React.FC = () => {
     <AnimatePresence>
       <div 
         id="cart-drawer-overlay"
-        className="fixed inset-0 z-50 overflow-hidden bg-black/70 backdrop-blur-sm flex justify-end"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Shopping cart"
+        tabIndex={-1}
+        className="outline-none fixed inset-0 z-50 overflow-hidden bg-black/70 backdrop-blur-sm flex justify-end"
       >
         <motion.div
           initial={{ opacity: 0 }}
@@ -112,6 +120,7 @@ export const CartDrawer: React.FC = () => {
               )}
               <button
                 onClick={() => setIsCartOpen(false)}
+                aria-label="Close cart"
                 className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 text-stone-400 hover:text-white transition-colors"
               >
                 <X className="w-4 h-4" />
@@ -163,6 +172,7 @@ export const CartDrawer: React.FC = () => {
                         </h4>
                         <button
                           onClick={() => removeFromCart(item.cartItemId)}
+                          aria-label={`Remove ${item.name} from cart`}
                           className="text-stone-400 hover:text-red-400 transition-colors p-0.5"
                           title="Remove item"
                         >
@@ -216,6 +226,7 @@ export const CartDrawer: React.FC = () => {
                       <div className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg border border-white/10">
                         <button
                           onClick={() => updateQuantity(item.cartItemId, -1)}
+                          aria-label={`Decrease quantity of ${item.name}`}
                           className="text-stone-400 hover:text-white"
                         >
                           <Minus className="w-3 h-3" />
@@ -225,6 +236,7 @@ export const CartDrawer: React.FC = () => {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.cartItemId, 1)}
+                          aria-label={`Increase quantity of ${item.name}`}
                           className="text-stone-400 hover:text-white"
                         >
                           <Plus className="w-3 h-3" />

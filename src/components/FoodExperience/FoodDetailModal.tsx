@@ -5,6 +5,7 @@ import { MenuItem, FoodCustomization } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { FOOD_SIZE_SURCHARGE, sumSelectedPrices } from '../../lib/pricing';
 import { formatNumberId } from '../../lib/format';
+import { useDialog } from '../../hooks/useDialog';
 
 const ADDONS_AVAILABLE = [
   { id: 'egg', name: '63°C Japanese Onsen Egg', price: 6000 },
@@ -22,6 +23,8 @@ export const FoodDetailModal: React.FC = () => {
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
+
+  const dialogRef = useDialog(!!selectedFood, () => setSelectedFood(null));
 
   if (!selectedFood) return null;
 
@@ -75,7 +78,12 @@ export const FoodDetailModal: React.FC = () => {
     <AnimatePresence>
       <div 
         id="food-detail-modal"
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Customize ${selectedFood.name}`}
+        tabIndex={-1}
+        className="outline-none fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -87,6 +95,7 @@ export const FoodDetailModal: React.FC = () => {
           {/* Close Button */}
           <button
             onClick={() => setSelectedFood(null)}
+            aria-label="Close"
             className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/15 text-stone-300 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
