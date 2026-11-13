@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Star, Check, Plus, Minus, Sparkles, Coffee, Leaf, Droplet, Snowflake } from 'lucide-react';
 import { MenuItem, DrinkCustomization } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { DRINK_SIZE_SURCHARGE, sumSelectedPrices } from '../../lib/pricing';
+import { formatNumberId } from '../../lib/format';
 
 const MILK_OPTIONS = [
   { id: 'Fresh Milk', name: 'Farm Fresh Dairy Milk', extraPrice: 0 },
@@ -33,12 +35,9 @@ export const DrinksCustomizationModal: React.FC = () => {
   if (!selectedDrink) return null;
 
   // Realtime Price Calculations
-  const sizePrice = size === 'Large' ? 6000 : 0;
+  const sizePrice = DRINK_SIZE_SURCHARGE[size];
   const milkPrice = MILK_OPTIONS.find((m) => m.id === milk)?.extraPrice || 0;
-  const toppingsTotal = selectedToppings.reduce((sum, topName) => {
-    const found = TOPPING_OPTIONS.find((t) => t.id === topName);
-    return sum + (found ? found.price : 0);
-  }, 0);
+  const toppingsTotal = sumSelectedPrices(selectedToppings, TOPPING_OPTIONS);
 
   const unitPrice = selectedDrink.price + sizePrice + milkPrice + toppingsTotal;
   const totalPrice = unitPrice * quantity;
@@ -159,7 +158,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                 </p>
 
                 <div className="mt-3 font-mono text-xl sm:text-2xl font-bold text-[#a3d9b4]">
-                  Rp {selectedDrink.price.toLocaleString('id-ID')}
+                  Rp {formatNumberId(selectedDrink.price)}
                 </div>
               </div>
 
@@ -187,7 +186,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                       >
                         <span className="block text-xs font-medium">{s}</span>
                         <span className="text-[10px] text-stone-400 font-mono block mt-0.5">
-                          {s === 'Large' ? '+Rp 6.000' : 'Included'}
+                          {DRINK_SIZE_SURCHARGE[s] > 0 ? `+Rp ${formatNumberId(DRINK_SIZE_SURCHARGE[s])}` : 'Included'}
                         </span>
                       </button>
                     );
@@ -228,7 +227,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                         </div>
                         {m.extraPrice > 0 && (
                           <span className="text-xs font-mono text-[#a3d9b4]">
-                            +Rp {m.extraPrice.toLocaleString('id-ID')}
+                            +Rp {formatNumberId(m.extraPrice)}
                           </span>
                         )}
                       </div>
@@ -324,7 +323,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                           <span className="text-xs">{top.name}</span>
                         </div>
                         <span className="text-xs font-mono text-[#a3d9b4]">
-                          +Rp {top.price.toLocaleString('id-ID')}
+                          +Rp {formatNumberId(top.price)}
                         </span>
                       </div>
                     );
@@ -382,7 +381,7 @@ export const DrinksCustomizationModal: React.FC = () => {
                 </div>
 
                 <span className="font-mono text-base font-bold">
-                  Rp {totalPrice.toLocaleString('id-ID')}
+                  Rp {formatNumberId(totalPrice)}
                 </span>
               </button>
             </div>

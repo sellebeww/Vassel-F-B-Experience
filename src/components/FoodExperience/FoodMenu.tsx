@@ -4,6 +4,7 @@ import { Plus, Star, Sparkles, Clock, Flame } from 'lucide-react';
 import { FOOD_MENU_ITEMS } from '../../data/foodData';
 import { FoodCategory, MenuItem } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { formatNumberId } from '../../lib/format';
 
 const CATEGORIES: FoodCategory[] = [
   'All',
@@ -185,7 +186,7 @@ export const FoodMenu: React.FC = () => {
                         Price
                       </span>
                       <span className="font-mono text-base sm:text-lg font-bold text-[#faf7f2]">
-                        Rp {item.price.toLocaleString('id-ID')}
+                        Rp {formatNumberId(item.price)}
                       </span>
                     </div>
 

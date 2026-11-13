@@ -4,6 +4,7 @@ import { Plus, Star, Sparkles, Sliders, Coffee, Leaf } from 'lucide-react';
 import { DRINKS_MENU_ITEMS } from '../../data/drinksData';
 import { DrinkCategory, MenuItem } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { formatNumberId } from '../../lib/format';
 
 const DRINK_CATEGORIES: DrinkCategory[] = [
   'All',
@@ -200,7 +201,7 @@ export const DrinksMenu: React.FC = () => {
                         Base Price
                       </span>
                       <span className="font-mono text-base sm:text-lg font-bold text-[#a3d9b4]">
-                        Rp {item.price.toLocaleString('id-ID')}
+                        Rp {formatNumberId(item.price)}
                       </span>
                     </div>
 

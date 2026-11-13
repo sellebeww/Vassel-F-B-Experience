@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, CheckCircle, QrCode, CreditCard, Wallet, Clock, MapPin, Sparkles, Receipt, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { OrderReceipt } from '../types';
+import { formatNumberId } from '../lib/format';
 
 export const CheckoutModal: React.FC = () => {
   const {
@@ -135,7 +136,7 @@ export const CheckoutModal: React.FC = () => {
                   </div>
                   <div className="flex justify-between border-t border-white/10 pt-2 text-sm font-bold">
                     <span className="text-stone-300">Total Paid</span>
-                    <span className="text-[#f5c69b]">Rp {receipt.total.toLocaleString('id-ID')}</span>
+                    <span className="text-[#f5c69b]">Rp {formatNumberId(receipt.total)}</span>
                   </div>
                 </div>
 
@@ -293,16 +294,16 @@ export const CheckoutModal: React.FC = () => {
                 <div className="p-4 rounded-2xl bg-black/30 border border-white/10 space-y-2 text-xs">
                   <div className="flex justify-between text-stone-400">
                     <span>Subtotal ({cart.length} items)</span>
-                    <span className="font-mono text-white">Rp {subtotal.toLocaleString('id-ID')}</span>
+                    <span className="font-mono text-white">Rp {formatNumberId(subtotal)}</span>
                   </div>
                   <div className="flex justify-between text-stone-400">
                     <span>Service &amp; Packaging Fee (5%)</span>
-                    <span className="font-mono text-white">Rp {serviceFee.toLocaleString('id-ID')}</span>
+                    <span className="font-mono text-white">Rp {formatNumberId(serviceFee)}</span>
                   </div>
                   <div className="pt-2 border-t border-white/10 flex justify-between font-bold text-sm text-white">
                     <span>Total Payment</span>
                     <span className="font-mono text-base text-[#f5c69b]">
-                      Rp {totalAmount.toLocaleString('id-ID')}
+                      Rp {formatNumberId(totalAmount)}
                     </span>
                   </div>
                 </div>

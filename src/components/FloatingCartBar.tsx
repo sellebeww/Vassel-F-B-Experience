@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { formatNumberId } from '../lib/format';
 
 export const FloatingCartBar: React.FC = () => {
   const {
@@ -56,7 +57,7 @@ export const FloatingCartBar: React.FC = () => {
               {cartCount} item{cartCount > 1 ? 's' : ''} in cart
             </div>
             <div className="text-[11px] text-white/80 font-mono whitespace-nowrap">
-              Rp {subtotal.toLocaleString('id-ID')}
+              Rp {formatNumberId(subtotal)}
             </div>
           </div>
 

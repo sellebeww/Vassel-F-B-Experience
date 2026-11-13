@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Star, Flame, Plus, Minus, Check, Clock, Sparkles } from 'lucide-react';
 import { MenuItem, FoodCustomization } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { FOOD_SIZE_SURCHARGE, sumSelectedPrices } from '../../lib/pricing';
+import { formatNumberId } from '../../lib/format';
 
 const ADDONS_AVAILABLE = [
   { id: 'egg', name: '63°C Japanese Onsen Egg', price: 6000 },
@@ -24,11 +26,8 @@ export const FoodDetailModal: React.FC = () => {
   if (!selectedFood) return null;
 
   // Pricing calculations
-  const sizePriceMultiplier = size === 'Double Patty' ? 24000 : size === 'Upsize' ? 15000 : 0;
-  const addonsTotal = selectedAddons.reduce((sum, id) => {
-    const found = ADDONS_AVAILABLE.find((a) => a.id === id);
-    return sum + (found ? found.price : 0);
-  }, 0);
+  const sizePriceMultiplier = FOOD_SIZE_SURCHARGE[size];
+  const addonsTotal = sumSelectedPrices(selectedAddons, ADDONS_AVAILABLE);
 
   const unitPrice = selectedFood.price + sizePriceMultiplier + addonsTotal;
   const totalPrice = unitPrice * quantity;
@@ -146,7 +145,7 @@ export const FoodDetailModal: React.FC = () => {
                 </p>
 
                 <div className="mt-3 font-mono text-xl sm:text-2xl font-bold text-[#f5c69b]">
-                  Rp {selectedFood.price.toLocaleString('id-ID')}
+                  Rp {formatNumberId(selectedFood.price)}
                 </div>
               </div>
 
@@ -161,7 +160,7 @@ export const FoodDetailModal: React.FC = () => {
                 <div className="grid grid-cols-3 gap-2">
                   {(['Regular', 'Double Patty', 'Upsize'] as const).map((s) => {
                     const isSelected = size === s;
-                    const priceNote = s === 'Double Patty' ? '+Rp 24.000' : s === 'Upsize' ? '+Rp 15.000' : 'Standard';
+                    const priceNote = FOOD_SIZE_SURCHARGE[s] > 0 ? `+Rp ${formatNumberId(FOOD_SIZE_SURCHARGE[s])}` : 'Standard';
                     return (
                       <button
                         key={s}
@@ -243,7 +242,7 @@ export const FoodDetailModal: React.FC = () => {
                           <span className="text-xs">{addon.name}</span>
                         </div>
                         <span className="text-xs font-mono text-[#f5c69b]">
-                          +Rp {addon.price.toLocaleString('id-ID')}
+                          +Rp {formatNumberId(addon.price)}
                         </span>
                       </div>
                     );
@@ -301,7 +300,7 @@ export const FoodDetailModal: React.FC = () => {
                 </div>
 
                 <span className="font-mono text-base font-bold">
-                  Rp {totalPrice.toLocaleString('id-ID')}
+                  Rp {formatNumberId(totalPrice)}
                 </span>
               </button>
             </div>

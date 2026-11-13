@@ -6,6 +6,8 @@ import { DRINKS_MENU_ITEMS } from '../data/drinksData';
 import { FOOD_SETS } from '../data/setsData';
 import { useApp } from '../context/AppContext';
 import { MenuItem, FoodSet } from '../types';
+import { searchItems } from '../lib/search';
+import { formatNumberId } from '../lib/format';
 
 const RECENT_SEARCHES = [
   'Truffle Beef Burger',
@@ -38,34 +40,11 @@ export const SearchModal: React.FC = () => {
 
   if (!isSearchOpen) return null;
 
-  const q = query.toLowerCase().trim();
+  const q = query.trim();
 
-  const matchingFood = q
-    ? FOOD_MENU_ITEMS.filter(
-        (item) =>
-          item.name.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q) ||
-          item.description.toLowerCase().includes(q)
-      )
-    : [];
-
-  const matchingDrinks = q
-    ? DRINKS_MENU_ITEMS.filter(
-        (item) =>
-          item.name.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q) ||
-          item.description.toLowerCase().includes(q)
-      )
-    : [];
-
-  const matchingSets = q
-    ? FOOD_SETS.filter(
-        (set) =>
-          set.name.toLowerCase().includes(q) ||
-          set.subtitle.toLowerCase().includes(q) ||
-          set.description.toLowerCase().includes(q)
-      )
-    : [];
+  const matchingFood = searchItems(FOOD_MENU_ITEMS, query);
+  const matchingDrinks = searchItems(DRINKS_MENU_ITEMS, query);
+  const matchingSets = searchItems(FOOD_SETS, query);
 
   const hasResults = matchingFood.length > 0 || matchingDrinks.length > 0 || matchingSets.length > 0;
 
@@ -185,7 +164,7 @@ export const SearchModal: React.FC = () => {
                                 {item.name}
                               </h4>
                               <span className="text-xs text-stone-400">
-                                {item.category} • Rp {item.price.toLocaleString('id-ID')}
+                                {item.category} • Rp {formatNumberId(item.price)}
                               </span>
                             </div>
                           </div>
@@ -221,7 +200,7 @@ export const SearchModal: React.FC = () => {
                                 {item.name}
                               </h4>
                               <span className="text-xs text-stone-400">
-                                {item.category} • Rp {item.price.toLocaleString('id-ID')}
+                                {item.category} • Rp {formatNumberId(item.price)}
                               </span>
                             </div>
                           </div>
@@ -257,7 +236,7 @@ export const SearchModal: React.FC = () => {
                                 {set.name}
                               </h4>
                               <span className="text-xs text-stone-400">
-                                From Rp {set.basePrice.toLocaleString('id-ID')}
+                                From Rp {formatNumberId(set.basePrice)}
                               </span>
                             </div>
                           </div>

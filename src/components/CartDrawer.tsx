@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight, Sparkles, PlusCircle } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { formatNumberId } from '../lib/format';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -231,7 +232,7 @@ export const CartDrawer: React.FC = () => {
                       </div>
 
                       <span className="font-mono text-xs sm:text-sm font-bold text-[#f5c69b]">
-                        Rp {item.totalPrice.toLocaleString('id-ID')}
+                        Rp {formatNumberId(item.totalPrice)}
                       </span>
                     </div>
                   </div>
@@ -309,19 +310,19 @@ export const CartDrawer: React.FC = () => {
                 <div className="flex justify-between">
                   <span>Subtotal</span>
                   <span className="font-mono text-white">
-                    Rp {subtotal.toLocaleString('id-ID')}
+                    Rp {formatNumberId(subtotal)}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Service Fee (5%)</span>
                   <span className="font-mono text-white">
-                    Rp {serviceFee.toLocaleString('id-ID')}
+                    Rp {formatNumberId(serviceFee)}
                   </span>
                 </div>
                 <div className="pt-2 border-t border-white/10 flex justify-between text-sm font-bold text-white">
                   <span>Total</span>
                   <span className="font-mono text-base text-[#f5c69b]">
-                    Rp {totalAmount.toLocaleString('id-ID')}
+                    Rp {formatNumberId(totalAmount)}
                   </span>
                 </div>
               </div>

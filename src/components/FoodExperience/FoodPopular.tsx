@@ -2,6 +2,7 @@ import React from 'react';
 import { Star, Flame, Trophy, ArrowRight } from 'lucide-react';
 import { FOOD_MENU_ITEMS } from '../../data/foodData';
 import { useApp } from '../../context/AppContext';
+import { formatNumberId } from '../../lib/format';
 
 export const FoodPopular: React.FC = () => {
   const { setSelectedFood } = useApp();
@@ -80,7 +81,7 @@ export const FoodPopular: React.FC = () => {
 
                 <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
                   <span className="font-mono text-sm font-bold text-[#f5c69b]">
-                    Rp {dish.price.toLocaleString('id-ID')}
+                    Rp {formatNumberId(dish.price)}
                   </span>
                   <span className="text-xs text-[#e28c61] font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
                     Order <ArrowRight className="w-3 h-3" />

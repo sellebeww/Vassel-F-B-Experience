@@ -4,6 +4,8 @@ import { Sparkles, Check, Plus, ArrowRight, ShieldCheck, Tag } from 'lucide-reac
 import { FOOD_SETS } from '../../data/setsData';
 import { FoodSet } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { sumSelectedPrices } from '../../lib/pricing';
+import { formatNumberId } from '../../lib/format';
 
 export const FoodSets: React.FC = () => {
   const { addToCart, setCustomizingSet } = useApp();
@@ -34,10 +36,7 @@ export const FoodSets: React.FC = () => {
   const mainExtra = chosenMain?.extraPrice || 0;
   const sideExtra = chosenSide?.extraPrice || 0;
   const drinkExtra = chosenDrink?.extraPrice || 0;
-  const addonsTotal = selectedAddons.reduce((sum, addonId) => {
-    const found = activeSet.addons.find((a) => a.id === addonId);
-    return sum + (found ? found.price : 0);
-  }, 0);
+  const addonsTotal = sumSelectedPrices(selectedAddons, activeSet.addons);
 
   const calculatedTotal = activeSet.basePrice + mainExtra + sideExtra + drinkExtra + addonsTotal;
 
@@ -142,10 +141,10 @@ export const FoodSets: React.FC = () => {
                 <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
                   <div>
                     <span className="text-[10px] text-stone-400 block line-through">
-                      Rp {set.originalPrice.toLocaleString('id-ID')}
+                      Rp {formatNumberId(set.originalPrice)}
                     </span>
                     <span className="font-mono text-base font-bold text-[#f5c69b]">
-                      From Rp {set.basePrice.toLocaleString('id-ID')}
+                      From Rp {formatNumberId(set.basePrice)}
                     </span>
                   </div>
 
@@ -189,7 +188,7 @@ export const FoodSets: React.FC = () => {
                   Package Total
                 </span>
                 <span className="font-mono text-xl sm:text-2xl font-bold text-[#f5c69b]">
-                  Rp {calculatedTotal.toLocaleString('id-ID')}
+                  Rp {formatNumberId(calculatedTotal)}
                 </span>
               </div>
               <button
@@ -244,7 +243,7 @@ export const FoodSets: React.FC = () => {
                       </div>
                       {main.extraPrice > 0 && (
                         <span className="text-[11px] font-mono text-[#f5c69b]">
-                          +Rp {main.extraPrice.toLocaleString('id-ID')}
+                          +Rp {formatNumberId(main.extraPrice)}
                         </span>
                       )}
                     </div>
@@ -292,7 +291,7 @@ export const FoodSets: React.FC = () => {
                       </div>
                       {side.extraPrice > 0 && (
                         <span className="text-[11px] font-mono text-[#f5c69b]">
-                          +Rp {side.extraPrice.toLocaleString('id-ID')}
+                          +Rp {formatNumberId(side.extraPrice)}
                         </span>
                       )}
                     </div>
@@ -340,7 +339,7 @@ export const FoodSets: React.FC = () => {
                       </div>
                       {drink.extraPrice > 0 && (
                         <span className="text-[11px] font-mono text-[#f5c69b]">
-                          +Rp {drink.extraPrice.toLocaleString('id-ID')}
+                          +Rp {formatNumberId(drink.extraPrice)}
                         </span>
                       )}
                     </div>
@@ -372,7 +371,7 @@ export const FoodSets: React.FC = () => {
                   >
                     <span>{addon.name}</span>
                     <span className="font-mono text-[11px] text-[#f5c69b] font-semibold">
-                      +Rp {addon.price.toLocaleString('id-ID')}
+                      +Rp {formatNumberId(addon.price)}
                     </span>
                   </button>
                 );
