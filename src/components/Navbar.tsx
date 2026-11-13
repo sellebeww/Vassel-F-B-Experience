@@ -82,6 +82,7 @@ export const Navbar: React.FC = () => {
           <button
             onClick={() => setExperience('landing')}
             title="Return to Experience Selector"
+            aria-label="Return to Experience Selector"
             className="group flex items-center gap-2 text-left focus:outline-none"
           >
             <div

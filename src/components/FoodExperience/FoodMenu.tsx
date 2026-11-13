@@ -77,6 +77,7 @@ export const FoodMenu: React.FC = () => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
+                aria-pressed={isSelected}
                 className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-300 ${
                   isSelected
                     ? 'bg-[#c95d2c] text-white shadow-md shadow-[#c95d2c]/30 font-semibold'
@@ -147,7 +148,7 @@ export const FoodMenu: React.FC = () => {
                   </div>
 
                   {/* Quick Add Overlay on Hover */}
-                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
                     <button
                       onClick={(e) => handleQuickAdd(e, item)}
                       className="px-4 py-2.5 rounded-full bg-[#c95d2c] text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 shadow-xl hover:bg-[#b54f20] transition-transform hover:scale-105"
